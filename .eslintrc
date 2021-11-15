@@ -1,0 +1,16 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2019,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "extends": ["eslint:recommended", "eslint-config-prettier"], // 使用推薦的 ESLint 設定，將 prettier 已經有的檢查給關閉
+  "rules": {
+    "semi": ["error", "never"] // 自訂配置，覆蓋推薦的 ESLint 設定
+  },
+  "env": {
+    "browser": true
+  }
+}
