@@ -19,7 +19,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint --ignore-path .gitignore .",
+    "lint": "eslint .",
     "prettier": "npx prettier --ignore-path .gitignore \"**/*.+(js)\"",
     "format": "npm run prettier -- --write",
     "check-format": "npm run prettier -- --list-different",
@@ -30,7 +30,7 @@
     "*.js": [
       "eslint"
     ],
-    "**/*.+(js|json)": [
+    "**/*.+(js)": [
       "prettier --write"
     ]
   },
