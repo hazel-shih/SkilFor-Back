@@ -115,7 +115,28 @@ const MembersController = {
     },
 
     getInfo: (req, res, next)=> {
-        res.json({test: "getinfo"})
+        let authHeader = req.header('Authorization') || ''
+        const token = authHeader.replace('Bearer ', '')
+        let jwtData
+        try {
+            //驗證 token，一樣帶入三個參數，最後一個參數為 optional
+            jwtData = jwt.verify(token, process.env.MB_SECRETKEY);
+        } catch(err) {
+        }
+
+        if (!jwtData) {
+            res.status(400)
+            res.json(
+                { errMessage: [
+                    {
+                        msg: "token is wrong",
+                    } 
+                ]}) 
+            return
+        }
+
+        //req.jwtData = jwtData
+        return res.json(jwtData)
     },
 }
 
