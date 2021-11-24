@@ -5,11 +5,46 @@ const jwt = require('jsonwebtoken') //做 jwt token 需引入
 const Teacher = db.Teacher;
 const Student = db.Student;
 
-
-
 const MembersController = {
-    login: (req, res, next)=> {
-        res.json({test: "login"})
+    login: async (req, res, next)=> {
+        var { identity, email, password } = req.body
+        //去資料庫找是否有其 email，有則回傳該使用者
+        var user
+        if (identity === "teacher") {
+            user = await Teacher.findOne({  
+                where: {
+                    email: email
+                }
+            })
+        } else {
+            user = await Student.findOne({
+                where: {
+                    email: email
+                }
+            })
+        }
+
+        if (!user) {
+            res.status(400)
+            res.json(
+                { errMessage: [
+                    {
+                        value:email,
+                        msg: "cant find the user",
+                        param: "email",
+                        location: "body"
+                    } 
+                ]}) 
+            return
+        }
+        const isValid = await bcrypt.compare(password, user.password)
+        if (isValid) {
+            return res.json({
+                success: true,
+                token: jwt.sign({ name: user.username, userId:user.id, identity:identity}, process.env.MB_SECRETKEY)
+            })
+        }
+    
     },
 
     register: async (req, res, next)=> {
