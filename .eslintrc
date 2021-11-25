@@ -11,6 +11,7 @@
     "semi": ["error", "never"] // 不加分號
   },
   "env": {
-    "browser": true // 允許 windows 物件
+    "browser": true, // 允許 windows 物件
+    "node": true
   }
 }
