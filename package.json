@@ -9,15 +9,10 @@
     "dotenv": "^10.0.0",
     "eslint": "^8.2.0",
     "express": "^4.17.1",
-<<<<<<< HEAD
-    "mysql2": "^2.3.3",
-    "node-fetch": "^3.1.0"
-=======
     "express-validator": "^6.13.0",
     "http-errors": "^1.8.1",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3"
->>>>>>> week2-memberAPI
   },
   "devDependencies": {
     "eslint-config-prettier": "^8.3.0",
