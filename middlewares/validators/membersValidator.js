@@ -29,6 +29,9 @@ exports.validateRegister = [
         .bail()
         .isLength({ min: 6 })
         .withMessage('password length cannot be less then 6')
+        .bail()
+        .isAlphanumeric()
+        .withMessage('password format is wrong')
         .bail(),
     check('checkPassword')
         .trim()
@@ -45,9 +48,20 @@ exports.validateRegister = [
         })
         .bail(),
     (req, res, next) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty())
-            return res.status(422).json({errMessage: errors.array()});
+        var errors = validationResult(req);
+        var errorsMsg = []
+        errors.errors.filter(function(item){
+            errorsMsg.push(item.msg);
+        })
+    
+        if (!errors.isEmpty()) {
+            res.status(422)
+            res.json({   
+                success: false,
+                errMessage:errorsMsg
+            })
+            return
+        }
         next();
     },
 ]
@@ -78,9 +92,19 @@ exports.validateLogin = [
         .withMessage('password length cannot be less then 6')
         .bail(),
     (req, res, next) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty())
-            return res.status(422).json({errMessage: errors.array()});
+        var errors = validationResult(req);
+        var errorsMsg = []
+        errors.errors.filter(function(item){
+            errorsMsg.push(item.msg)
+        })
+        if (!errors.isEmpty()) {
+            res.status(422)
+            res.json({   
+                success: false,
+                errMessage:errorsMsg
+            })
+            return
+        }
         next();
     },
 ]
