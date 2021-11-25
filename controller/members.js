@@ -1,7 +1,7 @@
 require("dotenv").config()
-const db = require('../models');
 const bcrypt = require('bcrypt'); // 做密碼雜湊需要引入
 const jwt = require('jsonwebtoken') //做 jwt token 需引入
+const db = require('../models');
 const Teacher = db.Teacher;
 const Student = db.Student;
 
@@ -13,13 +13,13 @@ const MembersController = {
         if (identity === "teacher") {
             user = await Teacher.findOne({  
                 where: {
-                    email: email
+                    email
                 }
             })
         } else {
             user = await Student.findOne({
                 where: {
-                    email: email
+                    email
                 }
             })
         }
@@ -55,13 +55,13 @@ const MembersController = {
         if (identity === "teacher") {
             isValid = await Teacher.findOne({
                 where: {
-                    email: email
+                    email
                 }
             })
         } else {
             isValid = await Student.findOne({
                 where: {
-                    email: email
+                    email
                 }
             })
         }
