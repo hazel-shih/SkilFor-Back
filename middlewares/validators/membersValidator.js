@@ -1,48 +1,57 @@
-const {check, validationResult} = require('express-validator');
+const {body,  validationResult} = require('express-validator');
 
 exports.validateRegister = [
-    check('username')
+    body('username')
         .trim()
         .not()
         .isEmpty()
-        .withMessage('username is required')
+        .withMessage('使用者名稱不得為空')
         .bail(),
-    check('identity')
+    body('identity')
         .not()
         .isEmpty()
-        .withMessage('identity is required')
+        .withMessage('身份不得為空')
         .bail(),
-    check('email')
+    body('email')
         .trim()
         .not()
         .isEmpty()
-        .withMessage('email is required')
+        .withMessage('信箱不得為空')
         .bail()
         .isEmail()
-        .withMessage('email format is wrong')
+        .withMessage('信箱格式錯誤')
         .bail(),
-    check('password')
+    body('contactEmail')
         .trim()
         .not()
         .isEmpty()
-        .withMessage('password is required')
+        .withMessage('聯絡信箱不得為空')
+        .bail()
+        .isEmail()
+        .withMessage('聯絡信箱格式錯誤')
+        .bail(),
+    body('password')
+        .trim()
+        .not()
+        .isEmpty()
+        .withMessage('密碼不得為空')
         .bail()
         .isLength({ min: 6 })
-        .withMessage('password length cannot be less then 6')
+        .withMessage('密碼不得少於六位數')
         .bail()
         .isAlphanumeric()
-        .withMessage('password format is wrong')
+        .withMessage('密碼格式錯誤')
         .bail(),
-    check('checkPassword')
+    body('checkPassword')
         .trim()
         .not()
         .isEmpty()
-        .withMessage('checkPassword is required')
+        .withMessage('再次輸入密碼不得為空')
         .bail()
         .custom((value, { req }) => {
             if (value !== req.body.password) {
                 // 驗證失敗時的錯誤訊息
-                throw new Error('password is not same as checkPassword')
+                throw new Error('密碼和再次輸入密碼不相符')
             }
             return true
         })
@@ -68,28 +77,28 @@ exports.validateRegister = [
 
 
 exports.validateLogin = [
-    check('identity')
+    body('identity')
         .not()
         .isEmpty()
-        .withMessage('identity is required')
+        .withMessage('身份不得為空')
         .bail(),
-    check('email')
+    body('email')
         .trim()
         .not()
         .isEmpty()
-        .withMessage('email is required')
+        .withMessage('信箱不得為空')
         .bail()
         .isEmail()
-        .withMessage('email format is wrong')
+        .withMessage('信箱格式錯誤')
         .bail(),
-    check('password')
+    body('password')
         .trim()
         .not()
         .isEmpty()
-        .withMessage('password is required')
+        .withMessage('密碼不得為空')
         .bail()
         .isLength({ min: 6 })
-        .withMessage('password length cannot be less then 6')
+        .withMessage('密碼不得少於六位數')
         .bail(),
     (req, res, next) => {
         var errors = validationResult(req);
