@@ -74,8 +74,8 @@ const MembersController = {
         
         // 新增資料到資料庫並返回 userId
         var userId
-        var avatarStudent = "https://example.student.com"
-        var avatarTeahcer = "https://example.teacher.com"
+        var avatarStudent = "https://i.imgur.com/f9bnLUM.png"
+        var avatarTeahcer = "https://i.imgur.com/7AGhwxo.png"
         try {
             if (identity === "teacher") {
                 const user = await Teacher.create({
