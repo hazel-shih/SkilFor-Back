@@ -1,18 +1,18 @@
-'use strict';
+"use strict"
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     return Promise.all([
       queryInterface.addColumn(
-        'Teachers', // table name
-        'email', // new field name
+        "Teachers", // table name
+        "email", // new field name
         {
           type: Sequelize.STRING,
           allowNull: false,
           unique: true
-        },
-      ),
-    ]);
+        }
+      )
+    ])
   },
 
   down: async (queryInterface, Sequelize) => {
@@ -22,8 +22,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    return Promise.all([
-      queryInterface.removeColumn('Teachers', 'email'),
-    ]);
+    return Promise.all([queryInterface.removeColumn("Teachers", "email")])
   }
-};
+}
