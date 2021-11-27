@@ -24,7 +24,7 @@
     "sequelize-cli": "^6.3.0"
   },
   "scripts": {
-	"test": "echo \"Error: no test specified\"",
+    "test": "echo \"Error: no test specified\"",
     "lint": "eslint .",
     "prettier": "npx prettier --ignore-path .gitignore \"**/*.+(js)\"",
     "format": "npm run prettier -- --write",
