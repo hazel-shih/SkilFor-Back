@@ -6,6 +6,7 @@ const auth = async (req, res, next) => {
   if (result.success) {
     return next()
   }
+  res.status(400)
   res.json({
     ...result
   })

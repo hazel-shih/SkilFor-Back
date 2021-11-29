@@ -3,10 +3,10 @@ const { Teacher, Course, Category } = db
 
 const TeachersController = {
   getTeacherInfo: async (req, res) => {
-    const { username } = req.params
+    const { requestEmail } = req.params
     const teacherInfo = await Teacher.findOne({
       where: {
-        username
+        email: requestEmail
       },
       include: [
         {
@@ -23,7 +23,7 @@ const TeachersController = {
       res.status(400)
       res.json({
         success: false,
-        errMessage: ["cant find this username"]
+        errMessage: ["找不到此使用者"]
       })
       return
     }
@@ -45,10 +45,10 @@ const TeachersController = {
   },
 
   getCourseInfo: async (req, res) => {
-    const { username } = req.params
+    const { requestEmail } = req.params
     const courseInfo = await Teacher.findOne({
       where: {
-        username
+        email: requestEmail
       },
       include: [
         {
@@ -65,7 +65,7 @@ const TeachersController = {
       res.status(400)
       res.json({
         success: false,
-        errMessage: ["cant find this username"]
+        errMessage: ["找不到此使用者"]
       })
       return
     }
