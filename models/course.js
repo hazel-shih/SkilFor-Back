@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       teacherId: DataTypes.INTEGER,
       categoryId: DataTypes.INTEGER,
       fee: DataTypes.INTEGER,
+      name: DataTypes.STRING,
       description: DataTypes.STRING,
       show: DataTypes.BOOLEAN,
       qualify: DataTypes.BOOLEAN
