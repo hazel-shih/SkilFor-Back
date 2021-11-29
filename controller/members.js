@@ -1,6 +1,7 @@
 require("dotenv").config()
 const bcrypt = require("bcrypt") // 做密碼雜湊需要引入
 const jwt = require("jsonwebtoken") //做 jwt token 需引入
+const checkAuth = require("../utils.js")
 const db = require("../models")
 const Teacher = db.Teacher
 const Student = db.Student
@@ -152,69 +153,9 @@ const MembersController = {
   },
 
   getInfo: async (req, res) => {
-    let authHeader = req.header("Authorization") || ""
-    const token = authHeader.replace("Bearer ", "")
-    //比對 token
-    let jwtData
-    try {
-      jwtData = jwt.verify(token, process.env.MB_SECRETKEY)
-    } catch (err) {
-      res.status(400)
-      res.json({
-        success: false,
-        errMessage: ["token 錯誤"]
-      })
-      return
-    }
-    // 如果沒有 token 時回傳錯誤
-    if (!jwtData) {
-      res.status(400)
-      res.json({
-        success: false,
-        errMessage: ["token 錯誤"]
-      })
-      return
-    }
-
-    //確認 jwtData 和資料庫是否吻合
-    let user
-    const { email, identity } = jwtData
-    if (jwtData.identity === "teacher") {
-      user = await Teacher.findOne({
-        where: {
-          email
-        }
-      })
-    } else if (jwtData.identity === "student") {
-      user = await Student.findOne({
-        where: {
-          email
-        }
-      })
-    } else {
-      res.json({
-        success: false,
-        value: identity,
-        errMessage: ["無此身份"]
-      })
-      return
-    }
-
-    //如果 jwtData 和資料庫不吻合則回傳無此使用者
-    if (!user) {
-      res.status(400)
-      res.json({
-        success: false,
-        value: email,
-        errMessage: ["找不到此使用者"]
-      })
-      return
-    }
-
-    //正確的 token
+    const result = await checkAuth(req, res)
     return res.json({
-      success: true,
-      user: jwtData
+      ...result
     })
   }
 }

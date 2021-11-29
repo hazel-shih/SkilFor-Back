@@ -1,0 +1,27 @@
+"use strict"
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    return Promise.all([
+      queryInterface.addColumn(
+        "Courses", // table name
+        "name", // new field name
+        {
+          type: Sequelize.STRING,
+          allowNull: false,
+          unique: true
+        }
+      )
+    ])
+  },
+
+  down: async (queryInterface, Sequelize) => {
+    /**
+     * Add reverting commands here.
+     *
+     * Example:
+     * await queryInterface.dropTable('users');
+     */
+    return Promise.all([queryInterface.removeColumn("Courses", "name")])
+  }
+}
