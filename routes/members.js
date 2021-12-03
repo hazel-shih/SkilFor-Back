@@ -1,14 +1,13 @@
 const express = require("express")
 const router = express.Router()
-const Members = require("../controller/members")
-// const { checkAuth } = require('../middlewares/authHandler')
+const MembersController = require("../controller/members")
 const {
   validateRegister,
   validateLogin
 } = require("../middlewares/validators/membersValidator")
 
-router.post("/login", validateLogin, Members.login)
-router.post("/register", validateRegister, Members.register)
-router.get("/me", Members.getInfo)
+router.post("/login", validateLogin, MembersController.login)
+router.post("/register", validateRegister, MembersController.register)
+router.get("/me", MembersController.getInfo)
 
 module.exports = router

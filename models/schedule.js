@@ -13,14 +13,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "courseId",
         onDelete: "CASCADE"
       })
-      Schedule.belongsTo(models.Calendar, {
-        foreignKey: "calendarId",
-        onDelete: "CASCADE"
-      })
       Schedule.belongsTo(models.Student, {
         foreignKey: "studentId"
       })
-      Schedule.hasOne(models.Cart, {
+      Schedule.hasMany(models.Order, {
         foreignKey: "ScheduleId"
       })
       Schedule.hasOne(models.Order, {
@@ -30,9 +26,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   Schedule.init(
     {
-      courseId: DataTypes.INTEGER,
-      calendarId: DataTypes.INTEGER,
-      studentId: DataTypes.INTEGER
+      courseId: DataTypes.STRING,
+      dateTime: DataTypes.DATE,
+      studentId: DataTypes.STRING
     },
     {
       sequelize,

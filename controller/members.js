@@ -9,8 +9,8 @@ const Student = db.Student
 const MembersController = {
   login: async (req, res) => {
     const { identity, email, password } = req.body
-    //去資料庫找是否有其 email，有則回傳該使用者
     let user
+    //去資料庫找是否有其 email，有則回傳該使用者
     if (identity === "teacher") {
       user = await Teacher.findOne({
         where: {
@@ -54,13 +54,14 @@ const MembersController = {
     }
     //登入成功回傳 token
     if (isValid) {
+      const { id, username, email } = user
       return res.json({
         success: true,
         token: jwt.sign(
           {
-            name: user.username,
-            email: email,
-            userId: user.id,
+            id,
+            username,
+            email,
             identity
           },
           process.env.MB_SECRETKEY
@@ -90,23 +91,22 @@ const MembersController = {
       return
     }
 
-    // 新增資料到資料庫並返回 userId
-    let userId
+    // 新增資料到資料庫
     const avatarStudent = "https://i.imgur.com/f9bnLUM.png"
     const avatarTeahcer = "https://i.imgur.com/7AGhwxo.png"
+    let user
     try {
       if (identity === "teacher") {
-        const user = await Teacher.create({
+        user = await Teacher.create({
           username,
           password,
           email,
           avatar: avatarTeahcer,
           contactEmail
         })
-        userId = user.id
       } else if (identity === "student") {
         const points = process.env.MB_INITIALPOINTS
-        const user = await Student.create({
+        user = await Student.create({
           username,
           password,
           email,
@@ -114,7 +114,6 @@ const MembersController = {
           avatar: avatarStudent,
           points
         })
-        userId = user.id
       } else {
         res.status(400)
         res.json({
@@ -142,9 +141,9 @@ const MembersController = {
       success: true,
       token: jwt.sign(
         {
-          name: req.body.username,
+          id: user.id,
+          username,
           email,
-          userId,
           identity
         },
         process.env.MB_SECRETKEY

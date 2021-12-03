@@ -1,4 +1,6 @@
 "use strict"
+const { customAlphabet } = require("nanoid")
+const nanoid = customAlphabet("1234567890", 6)
 const { Model } = require("sequelize")
 module.exports = (sequelize, DataTypes) => {
   class Teacher extends Model {
@@ -23,6 +25,11 @@ module.exports = (sequelize, DataTypes) => {
       avatar: DataTypes.STRING
     },
     {
+      hooks: {
+        beforeCreate: (teacher, option) => {
+          teacher.id = nanoid()
+        }
+      },
       sequelize,
       modelName: "Teacher"
     }

@@ -4,12 +4,11 @@ module.exports = {
     await queryInterface.createTable("Courses", {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       teacherId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         onDelete: "CASCADE",
         references: {
           model: "Teachers",
@@ -26,17 +25,20 @@ module.exports = {
           as: "categoryId"
         }
       },
-      fee: {
-        type: Sequelize.INTEGER
+      name: {
+        type: Sequelize.STRING
       },
       description: {
         type: Sequelize.STRING
       },
-      show: {
+      price: {
+        type: Sequelize.INTEGER
+      },
+      published: {
         type: Sequelize.BOOLEAN
       },
-      qualify: {
-        type: Sequelize.BOOLEAN
+      audit: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
