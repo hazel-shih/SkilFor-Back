@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
   Course.init(
     {
       teacherId: DataTypes.STRING,
-      categoryId: DataTypes.INTEGER,
+      categoryId: DataTypes.STRING,
       name: DataTypes.STRING,
       description: DataTypes.STRING,
       price: DataTypes.INTEGER,

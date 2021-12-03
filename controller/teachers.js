@@ -212,7 +212,7 @@ const TeachersController = {
         })
         return
       }
-      if (targetCourse.audit !== "pass") {
+      if (targetCourse.audit !== "success") {
         published = 0
       }
       await Course.update(
