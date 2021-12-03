@@ -3,31 +3,33 @@ const { Teacher, Course, Category } = db
 const TeachersController = {
   getTeacherInfo: async (req, res) => {
     const { jwtId } = req
-    const teacherInfo = await Teacher.findOne({
-      where: {
-        id: jwtId
-      },
-      include: [
-        {
-          model: Course,
-          include: [
-            {
-              model: Category
-            }
-          ]
-        }
-      ]
-    })
-    if (!teacherInfo) {
+    let teacherInfo
+    try {
+      teacherInfo = await Teacher.findOne({
+        where: {
+          id: jwtId
+        },
+        include: [
+          {
+            model: Course,
+            include: [
+              {
+                model: Category
+              }
+            ]
+          }
+        ]
+      })
+    } catch (err) {
       res.status(400)
       res.json({
         success: false,
-        errMessage: ["找不到此使用者"]
+        errMessage: ["系統錯誤"]
       })
       return
     }
     const { avatar, username, email, contactEmail, Courses } = teacherInfo
-    const categories = Courses.map((course) => course.Category.name)
+    const categories = Courses.map((course) => course.Category.displayName)
     res.json({
       success: true,
       data: {
@@ -45,10 +47,11 @@ const TeachersController = {
   editTeacherInfo: async (req, res) => {
     const { jwtId } = req
     try {
-      const { username, contactEmail } = req.body
+      const { username, avatar, contactEmail } = req.body
       await Teacher.update(
         {
           username,
+          avatar,
           contactEmail
         },
         {
@@ -83,23 +86,25 @@ const TeachersController = {
 
   getCourseInfo: async (req, res) => {
     const { jwtId } = req
-    const courses = await Course.findAll({
-      where: {
-        teacherId: jwtId
-      },
-      include: Category
-    })
-    if (!courses) {
+    let courses
+    try {
+      courses = await Course.findAll({
+        where: {
+          teacherId: jwtId
+        },
+        include: Category
+      })
+    } catch (err) {
       res.status(400)
       res.json({
         success: false,
-        errMessage: ["找不到此使用者"]
+        errMessage: ["系統錯誤"]
       })
       return
     }
     const data = courses.map((course) => {
       const { id, name, description, price, published, audit } = course
-      const category = course.Category.name
+      const category = course.Category.displayName
       return {
         id,
         category,
@@ -113,99 +118,6 @@ const TeachersController = {
     res.json({
       success: true,
       data
-    })
-    return
-  },
-
-  editCourseInfo: async (req, res) => {
-    const { jwtId } = req
-    const { id, courseName, courseDescription, price } = req.body
-    let { published } = req.body
-    try {
-      const targetCourse = await Course.findOne({
-        where: {
-          id,
-          teacherId: jwtId
-        }
-      })
-      if (!targetCourse) {
-        res.status(400)
-        res.json({
-          success: false,
-          value: id,
-          errMessage: ["找不到此課程"]
-        })
-        return
-      }
-      if (targetCourse.audit !== "pass") {
-        published = 0
-      }
-      await Course.update(
-        {
-          name: courseName,
-          description: courseDescription,
-          price,
-          published
-        },
-        {
-          where: {
-            id,
-            teacherId: jwtId
-          }
-        }
-      )
-    } catch (err) {
-      console.log(err)
-      res.status(400)
-      res.json({
-        success: false,
-        errMessage: ["系統錯誤"]
-      })
-      return
-    }
-    res.json({
-      success: true,
-      data: {
-        id,
-        courseName,
-        courseDescription,
-        price,
-        published
-      }
-    })
-    return
-  },
-
-  deleteCourse: async (req, res) => {
-    const { jwtId } = req
-    const { courseId } = req.body
-    try {
-      const result = await Course.destroy({
-        where: {
-          id: courseId,
-          teacherId: jwtId
-        }
-      })
-      if (!result) {
-        res.status(400)
-        res.json({
-          success: false,
-          value: courseId,
-          errMessage: ["找不到此課程"]
-        })
-        return
-      }
-    } catch (err) {
-      res.status(400)
-      res.json({
-        success: false,
-        value: courseId,
-        errMessage: ["系統錯誤"]
-      })
-      return
-    }
-    res.json({
-      success: true
     })
     return
   },
@@ -279,12 +191,95 @@ const TeachersController = {
     return
   },
 
-  getAllCategories: async (req, res) => {
-    const categories = await Category.findAll()
-    const data = categories.map((category) => category.name)
+  editCourseInfo: async (req, res) => {
+    const { jwtId } = req
+    const { id, courseName, courseDescription, price } = req.body
+    let { published } = req.body
+    let targetCourse
+    try {
+      targetCourse = await Course.findOne({
+        where: {
+          id,
+          teacherId: jwtId
+        }
+      })
+      if (!targetCourse) {
+        res.status(400)
+        res.json({
+          success: false,
+          value: id,
+          errMessage: ["找不到此課程"]
+        })
+        return
+      }
+      if (targetCourse.audit !== "pass") {
+        published = 0
+      }
+      await Course.update(
+        {
+          name: courseName,
+          description: courseDescription,
+          price,
+          published
+        },
+        {
+          where: {
+            id,
+            teacherId: jwtId
+          }
+        }
+      )
+    } catch (err) {
+      res.status(400)
+      res.json({
+        success: false,
+        errMessage: ["系統錯誤"]
+      })
+      return
+    }
     res.json({
       success: true,
-      data
+      data: {
+        id,
+        courseName,
+        courseDescription,
+        price,
+        published: Boolean(published),
+        audit: targetCourse.audit
+      }
+    })
+    return
+  },
+
+  deleteCourse: async (req, res) => {
+    const { jwtId } = req
+    const { id } = req.body
+    try {
+      const result = await Course.destroy({
+        where: {
+          id,
+          teacherId: jwtId
+        }
+      })
+      if (!result) {
+        res.status(400)
+        res.json({
+          success: false,
+          value: id,
+          errMessage: ["找不到此課程"]
+        })
+        return
+      }
+    } catch (err) {
+      res.status(400)
+      res.json({
+        success: false,
+        errMessage: ["系統錯誤"]
+      })
+      return
+    }
+    res.json({
+      success: true
     })
     return
   }
