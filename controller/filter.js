@@ -2,28 +2,8 @@ const db = require("../models")
 const { Category, Course, Teacher } = db
 
 const FilterController = {
-  courseCategory: async (req, res) => {
-    const categoryResult = await Category.findAll()
-    if (!categoryResult) {
-      res.status(400)
-      res.json({
-        success: false,
-        errMessage: ["目前無結果"]
-      })
-      return
-    }
-
-    const allCategory = categoryResult.map((item) => {
-      return item.name
-    })
-
-    res.json({
-      success: true,
-      data: allCategory
-    })
-    return
-  },
-
+  //1. 檢查空陣列，length = 0 代表還是有連線成功，false 則是連線失敗
+  //2. try catch
   allCourse: async (req, res) => {
     const allCourseResult = await Course.findAll({
       where: {
