@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       courseId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         onDelete: "CASCADE",
         references: {
           model: "Courses",

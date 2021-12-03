@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Topic.init(
     {
-      courseId: DataTypes.INTEGER,
+      courseId: DataTypes.STRING,
       name: DataTypes.STRING
     },
     {

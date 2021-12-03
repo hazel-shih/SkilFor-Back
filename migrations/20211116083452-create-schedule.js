@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       courseId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         onDelete: "CASCADE",
         references: {
           model: "Courses",
@@ -17,17 +17,11 @@ module.exports = {
           as: "courseId"
         }
       },
-      calendarId: {
-        type: Sequelize.INTEGER,
-        onDelete: "CASCADE",
-        references: {
-          model: "Calendars",
-          key: "id",
-          as: "calendarId"
-        }
+      dateTime: {
+        type: Sequelize.DATE
       },
       studentId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         references: {
           model: "Students",
           key: "id",

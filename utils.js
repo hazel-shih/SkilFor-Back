@@ -54,6 +54,7 @@ const checkAuth = async (req) => {
       errorMessage: "找不到此使用者"
     }
   }
+  req.jwtId = jwtData.id
   return {
     success: true,
     user: jwtData
