@@ -2,30 +2,37 @@ const db = require("../models")
 const { Category, Course, Teacher } = db
 
 const FilterController = {
-  //1. 檢查空陣列，length = 0 代表還是有連線成功，false 則是連線失敗
-  //2. try catch
   allCourse: async (req, res) => {
-    const allCourseResult = await Course.findAll({
-      where: {
-        published: true,
-        audit: "success"
-      },
-      include: [
-        {
-          model: Teacher
-        }
-      ]
-    })
-    if (!allCourseResult) {
+    let allCourse
+    try {
+      allCourse = await Course.findAll({
+        where: {
+          published: true,
+          audit: "success"
+        },
+        include: [
+          {
+            model: Teacher
+          }
+        ]
+      })
+    } catch (err) {
       res.status(400)
       res.json({
         success: false,
-        errMessage: ["目前無結果"]
+        errMessage: ["系統錯誤"]
+      })
+      return
+    }
+    if (allCourse.length === 0) {
+      res.json({
+        success: true,
+        data: ["目前尚未有課程"]
       })
       return
     }
 
-    const allCourse = allCourseResult.map((item) => {
+    const allCourseResult = allCourse.map((item) => {
       return {
         courseName: item.name,
         courseDescription: item.description,
@@ -37,40 +44,49 @@ const FilterController = {
 
     res.json({
       success: true,
-      data: allCourse
+      data: allCourseResult
     })
     return
   },
 
   specificCourse: async (req, res) => {
     const { specific } = req.params
-    const specificCourseResult = await Course.findAll({
-      where: {
-        published: true,
-        audit: "success"
-      },
-      include: [
-        {
-          model: Teacher
+    let specificCourse
+    try {
+      specificCourse = await Course.findAll({
+        where: {
+          published: true,
+          audit: "success"
         },
-        {
-          model: Category,
-          where: {
-            name: specific
+        include: [
+          {
+            model: Teacher
+          },
+          {
+            model: Category,
+            where: {
+              name: specific
+            }
           }
-        }
-      ]
-    })
-    if (!specificCourseResult) {
+        ]
+      })
+    } catch (err) {
       res.status(400)
       res.json({
         success: false,
-        errMessage: ["目前無結果"]
+        errMessage: ["系統錯誤"]
+      })
+      return
+    }
+    if (specificCourse.length === 0) {
+      res.json({
+        success: true,
+        data: ["目前尚未有課程"]
       })
       return
     }
 
-    const specificCourse = specificCourseResult.map((item) => {
+    const specificCourseResult = specificCourse.map((item) => {
       return {
         courseName: item.name,
         courseDescription: item.description,
@@ -82,7 +98,7 @@ const FilterController = {
 
     res.json({
       success: true,
-      data: specificCourse
+      data: specificCourseResult
     })
     return
   }
