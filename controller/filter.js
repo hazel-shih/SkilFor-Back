@@ -40,7 +40,7 @@ const FilterController = {
         price: item.price,
         teacherName: item.Teacher.username,
         teacherAvatar: item.Teacher.avatar,
-        teacherAId: item.Teacher.id
+        teacherId: item.Teacher.id
       }
     })
 
@@ -96,7 +96,7 @@ const FilterController = {
         price: item.price,
         teacherName: item.Teacher.username,
         teacherAvatar: item.Teacher.avatar,
-        teacherAId: item.Teacher.id
+        teacherId: item.Teacher.id
       }
     })
 
