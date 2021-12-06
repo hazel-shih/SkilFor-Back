@@ -36,9 +36,11 @@ const FilterController = {
       return {
         courseName: item.name,
         courseDescription: item.description,
+        courseId: item.categoryId,
         price: item.price,
         teacherName: item.Teacher.username,
-        teacherAvatar: item.Teacher.avatar
+        teacherAvatar: item.Teacher.avatar,
+        teacherAId: item.Teacher.id
       }
     })
 
@@ -90,9 +92,11 @@ const FilterController = {
       return {
         courseName: item.name,
         courseDescription: item.description,
+        courseId: item.categoryId,
         price: item.price,
         teacherName: item.Teacher.username,
-        teacherAvatar: item.Teacher.avatar
+        teacherAvatar: item.Teacher.avatar,
+        teacherAId: item.Teacher.id
       }
     })
 
