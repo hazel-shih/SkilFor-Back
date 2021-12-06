@@ -36,7 +36,7 @@ const FilterController = {
       return {
         courseName: item.name,
         courseDescription: item.description,
-        courseId: item.categoryId,
+        courseId: item.id,
         price: item.price,
         teacherName: item.Teacher.username,
         teacherAvatar: item.Teacher.avatar,
@@ -92,7 +92,7 @@ const FilterController = {
       return {
         courseName: item.name,
         courseDescription: item.description,
-        courseId: item.categoryId,
+        courseId: item.id,
         price: item.price,
         teacherName: item.Teacher.username,
         teacherAvatar: item.Teacher.avatar,
