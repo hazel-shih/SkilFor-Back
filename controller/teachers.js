@@ -90,7 +90,8 @@ const TeachersController = {
     try {
       courses = await Course.findAll({
         where: {
-          teacherId: jwtId
+          teacherId: jwtId,
+          ...(req.query.audit === "success" && { audit: "success" })
         },
         include: Category
       })
