@@ -18,7 +18,7 @@ module.exports = {
         }
       },
       scheduleId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         onDelete: "CASCADE",
         references: {
           model: "Schedules",

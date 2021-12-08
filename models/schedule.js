@@ -26,9 +26,14 @@ module.exports = (sequelize, DataTypes) => {
   }
   Schedule.init(
     {
+      title: DataTypes.STRING,
       courseId: DataTypes.STRING,
-      dateTime: DataTypes.DATE,
-      studentId: DataTypes.STRING
+      startTime: DataTypes.STRING,
+      finishTime: DataTypes.STRING,
+      studentId: DataTypes.STRING,
+      studentNote: DataTypes.STRING,
+      eventColor: DataTypes.STRING,
+      month: DataTypes.INTEGER
     },
     {
       sequelize,
