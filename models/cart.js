@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
   Cart.init(
     {
       studentId: DataTypes.STRING,
-      scheduleId: DataTypes.INTEGER
+      scheduleId: DataTypes.STRING
     },
     {
       sequelize,

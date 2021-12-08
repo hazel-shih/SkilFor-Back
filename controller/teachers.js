@@ -282,6 +282,13 @@ const TeachersController = {
       success: true
     })
     return
+  },
+
+  addCalendar: async (req, res) => {
+    console.log(req.body)
+    res.json({
+      success: true
+    })
   }
 }
 

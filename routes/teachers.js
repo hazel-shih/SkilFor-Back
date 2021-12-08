@@ -26,5 +26,6 @@ router.delete(
   validateDeleteCourse,
   TeachersController.deleteCourse
 )
+router.post("/calendar", TeachersController.addCalendar)
 
 module.exports = router
