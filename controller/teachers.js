@@ -1,6 +1,19 @@
 const db = require("../models")
-const { Teacher, Course, Category } = db
+const moment = require("moment")
+const { Teacher, Course, Category, Schedule } = db
 const TeachersController = {
+  checkIsTeacher: async (req, res, next) => {
+    const { identity } = req
+    if (identity !== "teacher") {
+      res.status(400)
+      res.json({
+        success: false,
+        errMessage: ["你不是老師"]
+      })
+      return
+    }
+    next()
+  },
   getTeacherInfo: async (req, res) => {
     const { jwtId } = req
     let teacherInfo
@@ -90,7 +103,8 @@ const TeachersController = {
     try {
       courses = await Course.findAll({
         where: {
-          teacherId: jwtId
+          teacherId: jwtId,
+          ...(req.query.audit === "success" && { audit: "success" })
         },
         include: Category
       })
@@ -285,10 +299,189 @@ const TeachersController = {
   },
 
   addCalendar: async (req, res) => {
-    console.log(req.body)
+    const { jwtId } = req
+    const {
+      id,
+      courseId,
+      start,
+      end,
+      title,
+      resource: { eventColor }
+    } = req.body
+    // 檢查是否為自己的課程並且已經通過審核
+    try {
+      const targetCourse = await Course.findOne({
+        where: {
+          id: courseId,
+          teacherId: jwtId
+        }
+      })
+      if (!targetCourse || targetCourse.audit !== "success") {
+        res.status(400)
+        res.json({
+          success: false,
+          errMessage: ["權限不足"]
+        })
+        return
+      }
+      // 新增行事曆
+      const month = Number(moment(start).tz("Asia/Taipei").format("MM"))
+      if (
+        await Schedule.findOne({
+          where: {
+            courseId,
+            startTime: start
+          }
+        })
+      ) {
+        res.status(400)
+        res.json({
+          success: false,
+          errMessage: ["不得在同時段新增一樣的課程"]
+        })
+      }
+      await Schedule.create({
+        id,
+        courseId,
+        title,
+        startTime: start,
+        finishTime: end,
+        eventColor,
+        month
+      })
+      return res.json({
+        success: true,
+        data: {
+          ...req.body
+        }
+      })
+    } catch (err) {
+      console.log(err)
+      res.status(400)
+      res.json({
+        success: false,
+        errMessage: ["系統錯誤"]
+      })
+      return
+    }
+  },
+
+  deleteCalendar: async (req, res) => {
+    const { jwtId } = req
+    const { id } = req.body
+    try {
+      const targetSchedule = await Schedule.findOne({
+        where: {
+          id
+        },
+        include: [
+          {
+            model: Course,
+            include: Teacher
+          }
+        ]
+      })
+      if (!targetSchedule) {
+        res.status(400)
+        res.json({
+          success: false,
+          value: id,
+          errMessage: ["找不到此行程"]
+        })
+        return
+      }
+      if (targetSchedule.Course.Teacher.id !== jwtId) {
+        res.status(400)
+        res.json({
+          success: false,
+          value: id,
+          errMessage: ["權限不足"]
+        })
+        return
+      }
+      await Schedule.destroy({
+        where: {
+          id
+        }
+      })
+    } catch (err) {
+      res.status(400)
+      res.json({
+        success: false,
+        errMessage: ["系統錯誤"]
+      })
+      return
+    }
     res.json({
       success: true
     })
+    return
+  },
+
+  getCalendarInfo: async (req, res) => {
+    const { jwtId } = req
+    const { month } = req.query
+    let courses
+    try {
+      courses = await Course.findAll({
+        where: {
+          teacherId: jwtId
+        },
+        include: [
+          {
+            model: Schedule,
+            where: { month }
+          }
+        ]
+      })
+    } catch (err) {
+      console.log(err)
+      res.status(400)
+      res.json({
+        success: false,
+        errMessage: ["系統錯誤"]
+      })
+      return
+    }
+    const data = courses.reduce((previousValue, currentValue) => {
+      const schedules = currentValue.Schedules
+      return previousValue.concat(
+        schedules.map((schedule) => {
+          const {
+            id,
+            courseId,
+            title,
+            startTime,
+            finishTime,
+            studentId,
+            studentNote,
+            eventColor
+          } = schedule
+          return {
+            id,
+            courseId,
+            title,
+            start: startTime,
+            end: finishTime,
+            resource: {
+              reserved: studentId,
+              studentNotes: studentNote,
+              eventColor: eventColor,
+              timePeriod: `${moment(startTime)
+                .tz("Asia/Taipei")
+                .format("h:mm")} ~ ${moment(finishTime)
+                .tz("Asia/Taipei")
+                .format("h:mm")}`
+            }
+          }
+        })
+      )
+    }, [])
+    res.json({
+      success: true,
+      data
+    })
+    return
   }
 }
 

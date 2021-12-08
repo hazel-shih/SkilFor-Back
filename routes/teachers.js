@@ -5,9 +5,13 @@ const {
   validateRegisterCourse,
   validateEditTeacherInfo,
   validateEditCourseInfo,
-  validateDeleteCourse
+  validateDeleteCourse,
+  validateAddCalendar,
+  validateGetCalendarInfo,
+  validateDeleteCalendar
 } = require("../middlewares/validators/teachersValidator")
 
+router.use(TeachersController.checkIsTeacher)
 router.get("/info", TeachersController.getTeacherInfo)
 router.put("/info", validateEditTeacherInfo, TeachersController.editTeacherInfo)
 router.get("/course/info", TeachersController.getCourseInfo)
@@ -26,6 +30,17 @@ router.delete(
   validateDeleteCourse,
   TeachersController.deleteCourse
 )
-router.post("/calendar", TeachersController.addCalendar)
+
+router.get(
+  "/calendar",
+  validateGetCalendarInfo,
+  TeachersController.getCalendarInfo
+)
+router.post("/calendar", validateAddCalendar, TeachersController.addCalendar)
+router.delete(
+  "/calendar",
+  validateDeleteCalendar,
+  TeachersController.deleteCalendar
+)
 
 module.exports = router
