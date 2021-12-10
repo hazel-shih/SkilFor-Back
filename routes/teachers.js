@@ -1,13 +1,18 @@
 const express = require("express")
 const router = express.Router()
 const TeachersController = require("../controller/teachers")
+const CalendarsController = require("../controller/calendars")
 const {
   validateRegisterCourse,
   validateEditTeacherInfo,
   validateEditCourseInfo,
-  validateDeleteCourse
+  validateDeleteCourse,
+  validateAddCalendar,
+  validateGetCalendarInfo,
+  validateDeleteCalendar
 } = require("../middlewares/validators/teachersValidator")
 
+router.use(TeachersController.checkIsTeacher)
 router.get("/info", TeachersController.getTeacherInfo)
 router.put("/info", validateEditTeacherInfo, TeachersController.editTeacherInfo)
 router.get("/course/info", TeachersController.getCourseInfo)
@@ -26,6 +31,16 @@ router.delete(
   validateDeleteCourse,
   TeachersController.deleteCourse
 )
-router.post("/calendar", TeachersController.addCalendar)
+router.get(
+  "/calendar",
+  validateGetCalendarInfo,
+  CalendarsController.getCalendarInfo
+)
+router.post("/calendar", validateAddCalendar, CalendarsController.addCalendar)
+router.delete(
+  "/calendar",
+  validateDeleteCalendar,
+  CalendarsController.deleteCalendar
+)
 
 module.exports = router

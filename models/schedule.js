@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Schedule.belongsTo(models.Teacher, {
+        foreignKey: "teacherId",
+        onDelete: "CASCADE"
+      })
       Schedule.belongsTo(models.Course, {
         foreignKey: "courseId",
         onDelete: "CASCADE"

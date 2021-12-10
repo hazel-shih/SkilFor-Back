@@ -24,7 +24,7 @@ const FilterController = {
       })
       return
     }
-    if (allCourse.length === 0) {
+    if (!allCourse.length) {
       res.json({
         success: true,
         data: []
@@ -80,7 +80,7 @@ const FilterController = {
       })
       return
     }
-    if (specificCourse.length === 0) {
+    if (!specificCourse.length) {
       res.json({
         success: true,
         data: []
