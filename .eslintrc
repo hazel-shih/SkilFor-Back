@@ -12,6 +12,7 @@
   },
   "env": {
     "browser": true, // 允許 windows 物件
-    "node": true
+    "node": true,
+	"es6": true
   }
 }

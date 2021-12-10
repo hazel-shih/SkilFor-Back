@@ -10,6 +10,15 @@ module.exports = {
       title: {
         type: Sequelize.STRING
       },
+      teacherId: {
+        type: Sequelize.STRING,
+        onDelete: "CASCADE",
+        references: {
+          model: "Teachers",
+          key: "id",
+          as: "teacherId"
+        }
+      },
       courseId: {
         type: Sequelize.STRING,
         onDelete: "CASCADE",
