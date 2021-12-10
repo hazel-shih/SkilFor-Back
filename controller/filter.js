@@ -27,7 +27,7 @@ const FilterController = {
     if (allCourse.length === 0) {
       res.json({
         success: true,
-        data: ["目前尚未有課程"]
+        data: []
       })
       return
     }
@@ -83,7 +83,7 @@ const FilterController = {
     if (specificCourse.length === 0) {
       res.json({
         success: true,
-        data: ["目前尚未有課程"]
+        data: []
       })
       return
     }
