@@ -55,6 +55,7 @@ const checkAuth = async (req) => {
     }
   }
   req.jwtId = jwtData.id
+  req.identity = jwtData.identity
   return {
     success: true,
     user: jwtData

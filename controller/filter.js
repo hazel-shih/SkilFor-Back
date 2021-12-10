@@ -24,10 +24,10 @@ const FilterController = {
       })
       return
     }
-    if (allCourse.length === 0) {
+    if (!allCourse.length) {
       res.json({
         success: true,
-        data: ["目前尚未有課程"]
+        data: []
       })
       return
     }
@@ -80,10 +80,10 @@ const FilterController = {
       })
       return
     }
-    if (specificCourse.length === 0) {
+    if (!specificCourse.length) {
       res.json({
         success: true,
-        data: ["目前尚未有課程"]
+        data: []
       })
       return
     }

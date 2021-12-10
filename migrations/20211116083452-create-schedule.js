@@ -4,9 +4,20 @@ module.exports = {
     await queryInterface.createTable("Schedules", {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
+      },
+      title: {
+        type: Sequelize.STRING
+      },
+      teacherId: {
+        type: Sequelize.STRING,
+        onDelete: "CASCADE",
+        references: {
+          model: "Teachers",
+          key: "id",
+          as: "teacherId"
+        }
       },
       courseId: {
         type: Sequelize.STRING,
@@ -17,8 +28,11 @@ module.exports = {
           as: "courseId"
         }
       },
-      dateTime: {
-        type: Sequelize.DATE
+      startTime: {
+        type: Sequelize.STRING
+      },
+      finishTime: {
+        type: Sequelize.STRING
       },
       studentId: {
         type: Sequelize.STRING,
@@ -27,6 +41,15 @@ module.exports = {
           key: "id",
           as: "studentId"
         }
+      },
+      studentNote: {
+        type: Sequelize.STRING
+      },
+      eventColor: {
+        type: Sequelize.STRING
+      },
+      eventColor: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

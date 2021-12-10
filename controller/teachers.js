@@ -1,6 +1,18 @@
 const db = require("../models")
 const { Teacher, Course, Category } = db
 const TeachersController = {
+  checkIsTeacher: async (req, res, next) => {
+    const { identity } = req
+    if (identity !== "teacher") {
+      res.status(400)
+      res.json({
+        success: false,
+        errMessage: ["你不是老師"]
+      })
+      return
+    }
+    next()
+  },
   getTeacherInfo: async (req, res) => {
     const { jwtId } = req
     let teacherInfo
@@ -90,7 +102,8 @@ const TeachersController = {
     try {
       courses = await Course.findAll({
         where: {
-          teacherId: jwtId
+          teacherId: jwtId,
+          ...(req.query.audit === "success" && { audit: "success" })
         },
         include: Category
       })
@@ -282,13 +295,6 @@ const TeachersController = {
       success: true
     })
     return
-  },
-
-  addCalendar: async (req, res) => {
-    console.log(req.body)
-    res.json({
-      success: true
-    })
   }
 }
 
