@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       teacherId: DataTypes.STRING,
       categoryId: DataTypes.STRING,
       name: DataTypes.STRING,
-      description: DataTypes.STRING,
+      description: DataTypes.TEXT,
       price: DataTypes.INTEGER,
       audit: DataTypes.STRING,
       published: DataTypes.BOOLEAN
