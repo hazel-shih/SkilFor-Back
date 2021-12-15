@@ -8,6 +8,7 @@ const Student = db.Student
 
 const MembersController = {
   login: async (req, res) => {
+    console.log("password")
     const { identity, email, password } = req.body
     let user
     //去資料庫找是否有其 email，有則回傳該使用者
