@@ -25,7 +25,7 @@ const FrontCalendarController = {
         const { id, courseId, startTime, finishTime, studentId, eventColor } =
           item
         return {
-          id,
+          scheduleId: id,
           courseId,
           title: `${moment(startTime)
             .tz("Asia/Taipei")
@@ -36,7 +36,7 @@ const FrontCalendarController = {
           end: finishTime,
           resource: {
             reserved: studentId ? "reserved" : null,
-            eventColor: eventColor
+            eventColor
           }
         }
       })
