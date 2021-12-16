@@ -17,7 +17,7 @@ const ShoppingCartController = {
         }
       })
       if (isDuplicate) {
-        res.status(200)
+        res.status(400)
         res.json({
           success: false,
           errMessage: ["此時段已加入購物車"]
@@ -108,6 +108,93 @@ const ShoppingCartController = {
     res.json({
       success: true,
       data
+    })
+    return
+  },
+
+  deleteItem: async (req, res) => {
+    const { jwtId } = req
+    const { scheduleId } = req.body
+    let result
+    try {
+      result = await Cart.findOne({
+        where: {
+          studentId: jwtId,
+          scheduleId,
+          deducted: null
+        }
+      })
+      if (!result) {
+        res.status(400)
+        res.json({
+          success: false,
+          errMessage: ["無此課程存在於購物車"]
+        })
+        return
+      }
+      console.log("result", result)
+      await Cart.destroy({
+        where: {
+          studentId: jwtId,
+          scheduleId,
+          deducted: null
+        }
+      })
+    } catch (err) {
+      res.status(400)
+      res.json({
+        success: false,
+        errMessage: ["系統錯誤"]
+      })
+      return
+    }
+    res.status(200)
+    res.json({
+      success: true,
+      data: ["刪除成功"]
+    })
+    return
+  },
+
+  editItem: async (req, res) => {
+    const { jwtId } = req
+    const { scheduleId, studentNote } = req.body
+    let result
+    try {
+      result = await Cart.update(
+        {
+          studentNote
+        },
+        {
+          where: {
+            scheduleId,
+            studentId: jwtId,
+            deducted: null
+          }
+        }
+      )
+      //查無此筆資料後回傳
+      if (result[0] === 0) {
+        res.status(400)
+        res.json({
+          success: false,
+          errMessage: ["修改失敗"]
+        })
+        return
+      }
+    } catch (err) {
+      res.status(400)
+      res.json({
+        success: false,
+        errMessage: ["系統錯誤"]
+      })
+      return
+    }
+
+    res.status(200)
+    res.json({
+      success: true,
+      data: ["修改成功"]
     })
     return
   }
