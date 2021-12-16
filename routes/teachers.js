@@ -4,7 +4,6 @@ const TeachersController = require("../controller/teachers")
 const CalendarsController = require("../controller/calendars")
 const {
   validateRegisterCourse,
-  validateEditTeacherInfo,
   validateEditCourseInfo,
   validateDeleteCourse,
   validateAddCalendar,
@@ -13,8 +12,6 @@ const {
 } = require("../middlewares/validators/teachersValidator")
 
 router.use(TeachersController.checkIsTeacher)
-router.get("/info", TeachersController.getTeacherInfo)
-router.put("/info", validateEditTeacherInfo, TeachersController.editTeacherInfo)
 router.get("/course/info", TeachersController.getCourseInfo)
 router.post(
   "/course/info",
