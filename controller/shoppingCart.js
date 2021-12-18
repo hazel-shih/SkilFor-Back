@@ -147,49 +147,6 @@ const ShoppingCartController = {
       data: ["品項刪除成功"]
     })
     return
-  },
-
-  editItem: async (req, res) => {
-    const { jwtId } = req
-    const { scheduleId, studentNote } = req.body
-    let result
-    try {
-      result = await Cart.update(
-        {
-          studentNote
-        },
-        {
-          where: {
-            scheduleId,
-            studentId: jwtId,
-            deducted: null
-          }
-        }
-      )
-      //查無此筆資料後回傳
-      if (result[0] === 0) {
-        res.status(400)
-        res.json({
-          success: false,
-          errMessage: ["留言修改失敗"]
-        })
-        return
-      }
-    } catch (err) {
-      res.status(400)
-      res.json({
-        success: false,
-        errMessage: ["系統錯誤"]
-      })
-      return
-    }
-
-    res.status(200)
-    res.json({
-      success: true,
-      data: ["留言修改成功"]
-    })
-    return
   }
 }
 
