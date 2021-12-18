@@ -53,7 +53,7 @@ const ShoppingCartController = {
           studentId: jwtId,
           deducted: null
         },
-        attributes: ["scheduleId", "studentNote"],
+        attributes: ["scheduleId"],
         include: [
           {
             model: Schedule,
@@ -90,7 +90,6 @@ const ShoppingCartController = {
     var data = results.map((item) => {
       return {
         scheduleId: item.scheduleId,
-        note: item.studentNote,
         courseId: item.Schedule.Course.id,
         courseName: item.Schedule.title,
         price: item.Schedule.Course.price,
