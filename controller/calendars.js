@@ -1,6 +1,7 @@
 const db = require("../models")
+const { sequelize } = require("../models")
 const moment = require("moment")
-const { Student, Course, Schedule } = db
+const { Student, Course, Schedule, Cart } = db
 const CalendarsController = {
   addCalendar: async (req, res) => {
     const { jwtId } = req
@@ -72,11 +73,11 @@ const CalendarsController = {
 
   deleteCalendar: async (req, res) => {
     const { jwtId } = req
-    const { id } = req.body
+    const { scheduleId } = req.body
     try {
       const targetSchedule = await Schedule.findOne({
         where: {
-          id,
+          id: scheduleId,
           teacherId: jwtId
         }
       })
@@ -84,7 +85,7 @@ const CalendarsController = {
         res.status(400)
         res.json({
           success: false,
-          value: id,
+          value: scheduleId,
           errMessage: ["找不到此行程"]
         })
         return
@@ -105,16 +106,25 @@ const CalendarsController = {
   },
 
   getCalendarInfo: async (req, res) => {
-    const { jwtId } = req
+    const { jwtId, identity } = req
     const { month } = req.query
     let schedules
     try {
-      schedules = await Schedule.findAll({
-        where: {
-          teacherId: jwtId,
-          month
-        }
-      })
+      if (identity === "teacher") {
+        schedules = await Schedule.findAll({
+          where: {
+            teacherId: jwtId,
+            month
+          }
+        })
+      } else {
+        schedules = await Schedule.findAll({
+          where: {
+            studentId: jwtId,
+            month
+          }
+        })
+      }
     } catch (err) {
       res.status(400)
       res.json({
@@ -164,6 +174,97 @@ const CalendarsController = {
       data
     })
     return
+  },
+
+  //學生取消已預訂的課程
+  cancelCalendar: async (req, res) => {
+    const { jwtId } = req
+    const { scheduleId } = req.body
+    try {
+      await sequelize.transaction(async (t) => {
+        const checkSchedule = await Schedule.findOne({
+          where: {
+            id: scheduleId,
+            studentId: jwtId
+          },
+          transaction: t
+        })
+
+        if (!checkSchedule) {
+          res.status(400)
+          res.json({
+            success: false,
+            errMessage: ["找不到此行程"]
+          })
+          return
+        }
+        //1. 判斷時間是否超過 24 小時
+        const time =
+          (new Date(checkSchedule.startTime) - new Date()) / (1000 * 60 * 60)
+        if (time < 24) {
+          res.status(400)
+          res.json({
+            success: false,
+            errMessage: ["24 小時內無法取消課程"]
+          })
+          return
+        }
+
+        //2. 取出復原的點數
+        const recoveredPoint = checkSchedule.reservedPrice
+        //3. 做更新復原
+        await Schedule.update(
+          {
+            studentId: null,
+            studentNote: null,
+            reservedPrice: null
+          },
+          {
+            where: {
+              id: scheduleId,
+              studentId: jwtId
+            },
+            transaction: t
+          }
+        )
+
+        // 4.加點數到到原本學生資料表
+        await Student.increment("points", {
+          by: recoveredPoint,
+          where: {
+            id: jwtId
+          },
+          transaction: t
+        })
+
+        // 5.刪除購物車
+        const deleteResult = await Cart.destroy({
+          where: {
+            studentId: jwtId,
+            scheduleId,
+            deducted: 1
+          },
+          transaction: t
+        })
+        // 成功為 1 ，失敗為 0 ，但失敗 transaction: t 不會啟動 rollback
+        if (deleteResult === 0) {
+          throw new Error()
+        }
+
+        res.json({
+          success: true,
+          data: ["成功取消預定課程"]
+        })
+        return
+      })
+    } catch (err) {
+      res.status(400)
+      res.json({
+        success: false,
+        errMessage: ["系統錯誤"]
+      })
+      return
+    }
   }
 }
 

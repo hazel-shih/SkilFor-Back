@@ -17,7 +17,7 @@ const ShoppingCartController = {
         }
       })
       if (isDuplicate) {
-        res.status(200)
+        res.status(400)
         res.json({
           success: false,
           errMessage: ["此時段已加入購物車"]
@@ -108,6 +108,43 @@ const ShoppingCartController = {
     res.json({
       success: true,
       data
+    })
+    return
+  },
+
+  deleteItem: async (req, res) => {
+    const { jwtId } = req
+    const { scheduleId } = req.body
+    let result
+    try {
+      result = await Cart.findOne({
+        where: {
+          studentId: jwtId,
+          scheduleId,
+          deducted: null
+        }
+      })
+      if (!result) {
+        res.status(400)
+        res.json({
+          success: false,
+          errMessage: ["無此課程存在於購物車"]
+        })
+        return
+      }
+      await result.destroy()
+    } catch (err) {
+      res.status(400)
+      res.json({
+        success: false,
+        errMessage: ["系統錯誤"]
+      })
+      return
+    }
+    res.status(200)
+    res.json({
+      success: true,
+      data: ["品項刪除成功"]
     })
     return
   }

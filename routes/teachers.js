@@ -5,13 +5,17 @@ const CalendarsController = require("../controller/calendars")
 const {
   validateRegisterCourse,
   validateEditCourseInfo,
-  validateDeleteCourse,
+  validateDeleteCourse
+} = require("../middlewares/validators/teachersValidator")
+
+const {
   validateAddCalendar,
   validateGetCalendarInfo,
   validateDeleteCalendar
-} = require("../middlewares/validators/teachersValidator")
+} = require("../middlewares/validators/calendarsValidator")
+const { checkIsTeacher } = require("../middlewares/identity/identity")
 
-router.use(TeachersController.checkIsTeacher)
+router.use(checkIsTeacher)
 router.get("/course/info", TeachersController.getCourseInfo)
 router.post(
   "/course/info",
