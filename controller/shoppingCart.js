@@ -132,14 +132,7 @@ const ShoppingCartController = {
         })
         return
       }
-      console.log("result", result)
-      await Cart.destroy({
-        where: {
-          studentId: jwtId,
-          scheduleId,
-          deducted: null
-        }
-      })
+      await result.destroy()
     } catch (err) {
       res.status(400)
       res.json({
@@ -151,7 +144,7 @@ const ShoppingCartController = {
     res.status(200)
     res.json({
       success: true,
-      data: ["刪除成功"]
+      data: ["品項刪除成功"]
     })
     return
   },
@@ -178,7 +171,7 @@ const ShoppingCartController = {
         res.status(400)
         res.json({
           success: false,
-          errMessage: ["修改失敗"]
+          errMessage: ["留言修改失敗"]
         })
         return
       }
@@ -194,7 +187,7 @@ const ShoppingCartController = {
     res.status(200)
     res.json({
       success: true,
-      data: ["修改成功"]
+      data: ["留言修改成功"]
     })
     return
   }

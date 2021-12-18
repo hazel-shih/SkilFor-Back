@@ -23,8 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       studentId: DataTypes.STRING,
       scheduleId: DataTypes.STRING,
-      studentNote: DataTypes.STRING,
-      deducted: DataTypes.STRING
+      deducted: DataTypes.BOOLEAN
     },
     {
       sequelize,
