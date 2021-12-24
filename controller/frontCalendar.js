@@ -10,7 +10,8 @@ const FrontCalendarController = {
       courseCalendar = await Schedule.findAll({
         where: {
           courseId,
-          month
+          month,
+          exist: 1
         }
       })
       //此課程 id 沒找到任何時段

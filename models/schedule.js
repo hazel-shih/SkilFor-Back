@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       Schedule.belongsTo(models.Student, {
         foreignKey: "studentId"
       })
-      Schedule.hasMany(models.Order, {
+      Schedule.hasMany(models.Cart, {
         foreignKey: "ScheduleId"
       })
       Schedule.hasOne(models.Order, {
@@ -38,7 +38,8 @@ module.exports = (sequelize, DataTypes) => {
       studentNote: DataTypes.STRING,
       eventColor: DataTypes.STRING,
       month: DataTypes.INTEGER,
-      reservedPrice: DataTypes.INTEGER
+      reservedPrice: DataTypes.INTEGER,
+      exist: DataTypes.BOOLEAN
     },
     {
       sequelize,

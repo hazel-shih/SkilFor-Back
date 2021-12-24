@@ -48,9 +48,6 @@ module.exports = {
       eventColor: {
         type: Sequelize.STRING
       },
-      eventColor: {
-        type: Sequelize.INTEGER
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
