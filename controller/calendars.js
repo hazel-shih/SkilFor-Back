@@ -53,7 +53,8 @@ const CalendarsController = {
         startTime: start,
         finishTime: end,
         eventColor,
-        month
+        month,
+        exist: 1
       })
       return res.json({
         success: true,
@@ -75,28 +76,61 @@ const CalendarsController = {
     const { jwtId } = req
     const { scheduleId } = req.body
     try {
-      const targetSchedule = await Schedule.findOne({
-        where: {
-          id: scheduleId,
-          teacherId: jwtId
+      await sequelize.transaction(async (t) => {
+        const targetSchedule = await Schedule.findOne({
+          where: {
+            id: scheduleId,
+            teacherId: jwtId,
+            exist: 1
+          }
+        })
+        if (!targetSchedule) {
+          res.status(400)
+          res.json({
+            success: false,
+            value: scheduleId,
+            errMessage: ["找不到此行程"]
+          })
+          return
+        }
+        //1. 判斷時間是否超過 24 小時
+        const time =
+          (new Date(targetSchedule.startTime) - new Date()) / (1000 * 60 * 60)
+        if (time < 24) {
+          res.status(400)
+          res.json({
+            success: false,
+            errMessage: ["24 小時內無法取消課程"]
+          })
+          return
+        }
+        //2. 更新 Schedule 狀態
+        await targetSchedule.update(
+          {
+            exist: 0
+          },
+          {
+            transaction: t
+          }
+        )
+        //3. 如果有學生預訂要還錢
+        const { recoveredPrice, studentId } = targetSchedule
+        if (studentId) {
+          await Student.increment("points", {
+            by: recoveredPrice,
+            where: {
+              id: jwtId
+            },
+            transaction: t
+          })
         }
       })
-      if (!targetSchedule) {
-        res.status(400)
-        res.json({
-          success: false,
-          value: scheduleId,
-          errMessage: ["找不到此行程"]
-        })
-        return
-      }
-      await targetSchedule.destroy()
     } catch (err) {
       console.log("delete error: ", err)
       res.status(400)
       res.json({
         success: false,
-        errMessage: err
+        errMessage: "系統錯誤"
       })
       return
     }
@@ -115,7 +149,8 @@ const CalendarsController = {
         schedules = await Schedule.findAll({
           where: {
             teacherId: jwtId,
-            month
+            month,
+            exist: 1
           }
         })
       } else {
@@ -144,26 +179,36 @@ const CalendarsController = {
           finishTime,
           studentId,
           studentNote,
-          eventColor
+          eventColor,
+          exist
         } = schedule
         const student = await Student.findOne({
           where: {
             id: studentId
           }
         })
+        const startPrefix =
+          Number(moment(startTime).tz("Asia/Taipei").format("h")) >= 12
+            ? "下午"
+            : "上午"
+        const endPrefix =
+          Number(moment(finishTime).tz("Asia/Taipei").format("h")) >= 12
+            ? "下午"
+            : "上午"
         return {
           id,
           courseId,
           title,
           start: startTime,
           end: finishTime,
+          ...(identity === "student" && { exist }),
           resource: {
             reserved: student ? student.username : null,
             studentNotes: studentNote,
             eventColor: eventColor,
-            timePeriod: `${moment(startTime)
+            timePeriod: `${startPrefix} ${moment(startTime)
               .tz("Asia/Taipei")
-              .format("h:mm")} ~ ${moment(finishTime)
+              .format("h:mm")} ~ ${endPrefix} ${moment(finishTime)
               .tz("Asia/Taipei")
               .format("h:mm")}`
           }
@@ -186,7 +231,8 @@ const CalendarsController = {
         const checkSchedule = await Schedule.findOne({
           where: {
             id: scheduleId,
-            studentId: jwtId
+            studentId: jwtId,
+            exist: 1
           },
           transaction: t
         })

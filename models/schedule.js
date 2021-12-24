@@ -38,7 +38,8 @@ module.exports = (sequelize, DataTypes) => {
       studentNote: DataTypes.STRING,
       eventColor: DataTypes.STRING,
       month: DataTypes.INTEGER,
-      reservedPrice: DataTypes.INTEGER
+      reservedPrice: DataTypes.INTEGER,
+      exist: DataTypes.BOOLEAN
     },
     {
       sequelize,
