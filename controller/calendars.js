@@ -92,10 +92,11 @@ const CalendarsController = {
       }
       await targetSchedule.destroy()
     } catch (err) {
+      console.log("delete error: ", err)
       res.status(400)
       res.json({
         success: false,
-        errMessage: ["系統錯誤"]
+        errMessage: err
       })
       return
     }

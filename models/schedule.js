@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       Schedule.belongsTo(models.Student, {
         foreignKey: "studentId"
       })
-      Schedule.hasMany(models.Order, {
+      Schedule.hasMany(models.Cart, {
         foreignKey: "ScheduleId"
       })
       Schedule.hasOne(models.Order, {
