@@ -88,6 +88,17 @@ const ShoppingCartController = {
     }
 
     var data = results.map((item) => {
+      const startPrefix =
+        Number(moment(item.Schedule.startTime).tz("Asia/Taipei").format("H")) >=
+        12
+          ? "下午"
+          : "上午"
+      const endPrefix =
+        Number(
+          moment(item.Schedule.finishTime).tz("Asia/Taipei").format("H")
+        ) >= 12
+          ? "下午"
+          : "上午"
       return {
         scheduleId: item.scheduleId,
         courseId: item.Schedule.Course.id,
@@ -97,9 +108,9 @@ const ShoppingCartController = {
         teacherName: item.Schedule.Teacher.username,
         start: item.Schedule.startTime,
         end: item.Schedule.finishTime,
-        timePeriod: `${moment(item.Schedule.startTime)
+        timePeriod: `${startPrefix} ${moment(item.Schedule.startTime)
           .tz("Asia/Taipei")
-          .format("h:mm")} ~ ${moment(item.Schedule.finishTime)
+          .format("h:mm")} ~ ${endPrefix} ${moment(item.Schedule.finishTime)
           .tz("Asia/Taipei")
           .format("h:mm")}`
       }

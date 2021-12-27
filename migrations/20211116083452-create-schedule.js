@@ -48,6 +48,9 @@ module.exports = {
       eventColor: {
         type: Sequelize.STRING
       },
+      exist: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
