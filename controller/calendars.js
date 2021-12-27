@@ -126,7 +126,6 @@ const CalendarsController = {
         }
       })
     } catch (err) {
-      console.log("delete error: ", err)
       res.status(400)
       res.json({
         success: false,
@@ -188,11 +187,11 @@ const CalendarsController = {
           }
         })
         const startPrefix =
-          Number(moment(startTime).tz("Asia/Taipei").format("h")) >= 12
+          Number(moment(startTime).tz("Asia/Taipei").format("H")) >= 12
             ? "下午"
             : "上午"
         const endPrefix =
-          Number(moment(finishTime).tz("Asia/Taipei").format("h")) >= 12
+          Number(moment(finishTime).tz("Asia/Taipei").format("H")) >= 12
             ? "下午"
             : "上午"
         return {
