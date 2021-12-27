@@ -39,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       eventColor: DataTypes.STRING,
       month: DataTypes.INTEGER,
       reservedPrice: DataTypes.INTEGER,
+      meetingLink: DataTypes.STRING,
       exist: DataTypes.BOOLEAN
     },
     {

@@ -78,6 +78,42 @@ const ShoppingCartController = {
         })
         return
       }
+
+      for (let i = 0; i < results.length; i++) {
+        const checkSchedule = await Schedule.findOne({
+          where: {
+            id: results[i].scheduleId
+          }
+        })
+
+        // 0. 檢查 scheduleId 是否存在資料庫
+        if (!checkSchedule) {
+          results[i].scheduleStatus = "無此課程時段"
+          continue
+        }
+
+        const { studentId, startTime, exist } = checkSchedule
+
+        if (exist == false) {
+          results[i].scheduleStatus = "此時段課程已被刪除"
+          continue
+        }
+
+        //1. 檢查此課程是否過期
+        if (new Date(startTime) < new Date()) {
+          results[i].scheduleStatus = "此時段課程已過期"
+          continue
+        }
+
+        //2. 檢查此課程是否與學生已預定課程衝突 3. 此課程是否已被其他人預訂
+        if (studentId === jwtId) {
+          results[i].scheduleStatus = "您已預訂此課程"
+          continue
+        } else if (studentId) {
+          results[i].scheduleStatus = "此課程已被預訂"
+          continue
+        }
+      }
     } catch (err) {
       res.status(400)
       res.json({
@@ -101,6 +137,7 @@ const ShoppingCartController = {
           : "上午"
       return {
         scheduleId: item.scheduleId,
+        scheduleStatus: item.scheduleStatus || null,
         courseId: item.Schedule.Course.id,
         courseName: item.Schedule.title,
         price: item.Schedule.Course.price,

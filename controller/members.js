@@ -1,14 +1,13 @@
 require("dotenv").config()
 const bcrypt = require("bcrypt") // 做密碼雜湊需要引入
 const jwt = require("jsonwebtoken") //做 jwt token 需引入
-const checkAuth = require("../utils.js")
+const { checkAuth } = require("../utils.js")
 const db = require("../models")
 const Teacher = db.Teacher
 const Student = db.Student
 
 const MembersController = {
   login: async (req, res) => {
-    console.log("password")
     const { identity, email, password } = req.body
     let user
     //去資料庫找是否有其 email，有則回傳該使用者

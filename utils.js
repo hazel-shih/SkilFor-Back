@@ -62,4 +62,16 @@ const checkAuth = async (req) => {
   }
 }
 
-module.exports = checkAuth
+const checkTimeOverlap = (startTime1, endTime1, startTime2, endTime2) => {
+  startTime1 = new Date(startTime1).getTime()
+  endTime1 = new Date(endTime1).getTime()
+  startTime2 = new Date(startTime2).getTime()
+  endTime2 = new Date(endTime2).getTime()
+
+  return startTime1 < endTime2 && startTime2 < endTime1
+  // if (startTime1 < endTime2 && startTime2 < endTime1) {
+  //   return true
+  // }
+}
+
+module.exports = { checkAuth, checkTimeOverlap }
