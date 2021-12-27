@@ -48,8 +48,8 @@ module.exports = {
       eventColor: {
         type: Sequelize.STRING
       },
-      eventColor: {
-        type: Sequelize.INTEGER
+      exist: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,

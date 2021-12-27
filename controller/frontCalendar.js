@@ -10,7 +10,8 @@ const FrontCalendarController = {
       courseCalendar = await Schedule.findAll({
         where: {
           courseId,
-          month
+          month,
+          exist: 1
         }
       })
       //此課程 id 沒找到任何時段
@@ -24,12 +25,20 @@ const FrontCalendarController = {
       data = courseCalendar.map((item) => {
         const { id, courseId, startTime, finishTime, studentId, eventColor } =
           item
+        const startPrefix =
+          Number(moment(startTime).tz("Asia/Taipei").format("h")) >= 12
+            ? "下午"
+            : "上午"
+        const endPrefix =
+          Number(moment(finishTime).tz("Asia/Taipei").format("h")) >= 12
+            ? "下午"
+            : "上午"
         return {
           scheduleId: id,
           courseId,
-          title: `${moment(startTime)
+          title: `${startPrefix} ${moment(startTime)
             .tz("Asia/Taipei")
-            .format("h:mm")} ~ ${moment(finishTime)
+            .format("h:mm")} ~ ${endPrefix} ${moment(finishTime)
             .tz("Asia/Taipei")
             .format("h:mm")}`,
           start: startTime,
