@@ -1,5 +1,5 @@
 require("dotenv").config()
-const checkAuth = require("../../utils.js")
+const { checkAuth } = require("../../utils.js")
 
 const auth = async (req, res, next) => {
   const result = await checkAuth(req, res)
