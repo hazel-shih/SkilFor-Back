@@ -311,6 +311,47 @@ const CalendarsController = {
       })
       return
     }
+  },
+
+  //學生刪除已過期的課程
+  removeCalendar: async (req, res) => {
+    const { jwtId } = req
+    const { scheduleId } = req.body
+    try {
+      const checkSchedule = await Schedule.findOne({
+        where: {
+          id: scheduleId,
+          studentId: jwtId
+        }
+      })
+      if (!checkSchedule) {
+        return res.status(400).json({
+          success: false,
+          errMessage: ["找不到此行程"]
+        })
+      }
+
+      if (new Date() <= new Date(checkSchedule.finishTime)) {
+        res.status(400)
+        res.json({
+          success: false,
+          errMessage: ["課程尚未過期無法移除"]
+        })
+        return
+      }
+
+      await checkSchedule.destroy()
+
+      return res.status(200).json({
+        success: true,
+        data: ["成功移除過期課程"]
+      })
+    } catch (err) {
+      return res.status(400).json({
+        success: false,
+        errMessage: ["系統錯誤"]
+      })
+    }
   }
 }
 

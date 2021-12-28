@@ -18,5 +18,10 @@ router.put(
   validateDeleteCalendar,
   CalendarsController.cancelCalendar
 )
+router.delete(
+  "/calendar",
+  validateDeleteCalendar,
+  CalendarsController.removeCalendar
+)
 
 module.exports = router
