@@ -111,7 +111,7 @@ const OrderController = {
 
       // 5. 判斷欲預定時段與學生已預定課程是否衝突
       if (resersedSchedule.length !== 0) {
-        for (let i = 0; i < scheduleData.length - 1; i++) {
+        for (let i = 0; i < scheduleData.length; i++) {
           for (let j = 0; j < resersedSchedule.length; j++) {
             const overLapResult = checkTimeOverlap(
               scheduleData[i][2],
