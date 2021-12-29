@@ -1,5 +1,5 @@
 const db = require("../models")
-const { Schedule, Student } = db
+const { Schedule, Student, Cart } = db
 const { sequelize } = require("../models")
 const { checkTimeOverlap } = require("../utils.js")
 const { Op } = require("sequelize")
@@ -149,6 +149,19 @@ const OrderController = {
             {
               where: {
                 id: scheduleId[i]
+              },
+              transaction: t
+            }
+          )
+
+          await Cart.update(
+            {
+              deducted: true
+            },
+            {
+              where: {
+                scheduleId: scheduleId[i],
+                studentId: jwtId
               },
               transaction: t
             }

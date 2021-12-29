@@ -69,9 +69,6 @@ const checkTimeOverlap = (startTime1, endTime1, startTime2, endTime2) => {
   endTime2 = new Date(endTime2).getTime()
 
   return startTime1 < endTime2 && startTime2 < endTime1
-  // if (startTime1 < endTime2 && startTime2 < endTime1) {
-  //   return true
-  // }
 }
 
 module.exports = { checkAuth, checkTimeOverlap }
