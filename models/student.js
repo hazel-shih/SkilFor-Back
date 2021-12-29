@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
       Student.hasMany(models.Order, {
         foreignKey: "studentId"
       })
+      Student.hasMany(models.Point, {
+        foreignKey: "studentId"
+      })
     }
   }
   Student.init(
