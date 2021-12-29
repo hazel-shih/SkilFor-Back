@@ -5,6 +5,7 @@ const { checkAuth } = require("../utils.js")
 const db = require("../models")
 const Teacher = db.Teacher
 const Student = db.Student
+const Administrator = db.Administrator
 
 const MembersController = {
   login: async (req, res) => {
@@ -19,6 +20,12 @@ const MembersController = {
       })
     } else if (identity === "student") {
       user = await Student.findOne({
+        where: {
+          email
+        }
+      })
+    } else if (identity === "administrator") {
+      user = await Administrator.findOne({
         where: {
           email
         }
