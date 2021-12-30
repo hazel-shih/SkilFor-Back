@@ -1,6 +1,6 @@
 const db = require("../models")
-const { Point } = db
-
+const { Point, Student } = db
+const { sequelize } = require("../models")
 const PointsController = {
   buyPoint: async (req, res) => {
     const { jwtId } = req
@@ -25,7 +25,41 @@ const PointsController = {
     }
   },
   checkBuyPoint: async (req, res) => {
-    console.log("call back: ", req.body)
+    const { MerchantTradeNo, TradeAmt } = req.body
+    try {
+      await sequelize.transaction(async (t) => {
+        const pointRecord = await Point.findOne({
+          where: {
+            id: MerchantTradeNo
+          }
+        })
+        if (pointRecord) {
+          await pointRecord.update(
+            {
+              success: true
+            },
+            {
+              transaction: t
+            }
+          )
+          const { studentId } = pointRecord
+          const student = await Student.findOne({
+            where: {
+              id: studentId
+            }
+          })
+          if (student) {
+            await student.increment("points", {
+              by: Number(TradeAmt),
+              transaction: t
+            })
+          }
+        }
+      })
+    } catch (err) {
+      console.log(err)
+      res.end()
+    }
     res.end()
   }
 }

@@ -9,6 +9,5 @@ const {
 
 router.use(checkIsStudent)
 router.post("/", validateBuyPoint, PointController.buyPoint)
-router.post("/ecpay/callback", PointController.checkBuyPoint)
 
 module.exports = router
