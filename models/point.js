@@ -2,7 +2,6 @@
 const { customAlphabet } = require("nanoid")
 const nanoid = customAlphabet("1234567890", 6)
 const { Model } = require("sequelize")
-
 module.exports = (sequelize, DataTypes) => {
   class Point extends Model {
     /**
@@ -21,7 +20,9 @@ module.exports = (sequelize, DataTypes) => {
   Point.init(
     {
       studentId: DataTypes.STRING,
-      amount: DataTypes.STRING,
+      itemName: DataTypes.STRING,
+      totalAmount: DataTypes.INTEGER,
+      totalPoint: DataTypes.INTEGER,
       success: DataTypes.BOOLEAN
     },
     {
