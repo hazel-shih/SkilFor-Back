@@ -45,21 +45,16 @@ const PointsController = {
             }
           )
           const { studentId, totalPoint } = pointRecord
-          const student = await Student.findOne({
+          await Student.increment("points", {
+            by: totalPoint,
             where: {
               id: studentId
-            }
+            },
+            transaction: t
           })
-          if (student) {
-            await student.increment("points", {
-              by: totalPoint,
-              transaction: t
-            })
-          }
         }
       })
     } catch (err) {
-      console.log(err)
       res.end()
     }
     res.end()

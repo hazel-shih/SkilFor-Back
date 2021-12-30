@@ -1,5 +1,5 @@
 const db = require("../models")
-const { Teacher, Student, Course, Category } = db
+const { Teacher, Student, Course, Category, Administrator } = db
 
 const UsersController = {
   getUserInfo: async (req, res) => {
@@ -33,6 +33,32 @@ const UsersController = {
             email,
             contactEmail,
             categories
+          }
+        })
+        return
+      } catch (err) {
+        res.status(400)
+        res.json({
+          success: false,
+          errMessage: ["系統錯誤"]
+        })
+        return
+      }
+    } else if (identity === "administrator") {
+      try {
+        userInfo = await Administrator.findOne({
+          where: {
+            id: jwtId
+          }
+        })
+        const { username, email, contactEmail } = userInfo
+        res.json({
+          success: true,
+          data: {
+            id: jwtId,
+            username,
+            email,
+            contactEmail
           }
         })
         return
