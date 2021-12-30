@@ -16,6 +16,15 @@ module.exports = {
           as: "studentId"
         }
       },
+      itemName: {
+        type: Sequelize.STRING
+      },
+      totalAmount: {
+        type: Sequelize.INTEGER
+      },
+      totalPoint: {
+        type: Sequelize.INTEGER
+      },
       amount: {
         type: Sequelize.INTEGER
       },
