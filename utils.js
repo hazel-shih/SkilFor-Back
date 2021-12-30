@@ -1,6 +1,6 @@
 require("dotenv").config()
 const jwt = require("jsonwebtoken") //做 jwt token 需引入
-const { Teacher, Student } = require("./models")
+const { Teacher, Student, Administrator } = require("./models")
 
 const checkAuth = async (req) => {
   let authHeader = req.header("Authorization") || ""
@@ -38,6 +38,12 @@ const checkAuth = async (req) => {
         email
       }
     })
+  } else if (jwtData.identity === "administrator") {
+    user = await Administrator.findOne({
+      where: {
+        email
+      }
+    })
   } else {
     return {
       success: false,
@@ -67,7 +73,6 @@ const checkTimeOverlap = (startTime1, endTime1, startTime2, endTime2) => {
   endTime1 = new Date(endTime1).getTime()
   startTime2 = new Date(startTime2).getTime()
   endTime2 = new Date(endTime2).getTime()
-
   return startTime1 < endTime2 && startTime2 < endTime1
 }
 

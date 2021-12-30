@@ -2,9 +2,8 @@
 const { customAlphabet } = require("nanoid")
 const nanoid = customAlphabet("1234567890", 6)
 const { Model } = require("sequelize")
-
 module.exports = (sequelize, DataTypes) => {
-  class Point extends Model {
+  class Administrator extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -12,29 +11,24 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Point.belongsTo(models.Student, {
-        foreignKey: "studentId",
-        onDelete: "CASCADE"
-      })
     }
   }
-  Point.init(
+  Administrator.init(
     {
-      studentId: DataTypes.STRING,
-      itemName: DataTypes.STRING,
-      totalAmount: DataTypes.INTEGER,
-      totalPoint: DataTypes.INTEGER,
-      success: DataTypes.BOOLEAN
+      username: DataTypes.STRING,
+      email: DataTypes.STRING,
+      contactEmail: DataTypes.STRING,
+      password: DataTypes.STRING
     },
     {
       hooks: {
-        beforeCreate: (point, option) => {
-          point.id = `skilfor${nanoid()}`
+        beforeCreate: (administrator, option) => {
+          administrator.id = nanoid()
         }
       },
       sequelize,
-      modelName: "Point"
+      modelName: "Administrator"
     }
   )
-  return Point
+  return Administrator
 }
