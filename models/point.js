@@ -20,7 +20,9 @@ module.exports = (sequelize, DataTypes) => {
   Point.init(
     {
       studentId: DataTypes.STRING,
-      amount: DataTypes.STRING,
+      itemName: DataTypes.STRING,
+      totalAmount: DataTypes.INTEGER,
+      totalPoint: DataTypes.INTEGER,
       success: DataTypes.BOOLEAN
     },
     {

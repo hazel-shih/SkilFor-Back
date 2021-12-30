@@ -4,11 +4,13 @@ const { sequelize } = require("../models")
 const PointsController = {
   buyPoint: async (req, res) => {
     const { jwtId } = req
-    const { amount } = req.body
+    const { ItemName, TotalPoint, TotalAmount } = req.body
     try {
       const newRecord = await Point.create({
         studentId: jwtId,
-        amount,
+        totalPoint: TotalPoint,
+        totalAmount: TotalAmount,
+        itemName: ItemName,
         success: false
       })
       return res.status(200).json({
@@ -25,7 +27,7 @@ const PointsController = {
     }
   },
   checkBuyPoint: async (req, res) => {
-    const { MerchantTradeNo, TradeAmt } = req.body
+    const { MerchantTradeNo } = req.body
     try {
       await sequelize.transaction(async (t) => {
         const pointRecord = await Point.findOne({
@@ -42,7 +44,7 @@ const PointsController = {
               transaction: t
             }
           )
-          const { studentId } = pointRecord
+          const { studentId, totalPoint } = pointRecord
           const student = await Student.findOne({
             where: {
               id: studentId
@@ -50,7 +52,7 @@ const PointsController = {
           })
           if (student) {
             await student.increment("points", {
-              by: Number(TradeAmt),
+              by: totalPoint,
               transaction: t
             })
           }
