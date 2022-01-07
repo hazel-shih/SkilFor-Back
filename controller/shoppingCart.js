@@ -65,7 +65,7 @@ const ShoppingCartController = {
               },
               {
                 model: Course,
-                attributes: ["id", "price"]
+                attributes: ["id", "price", "published"]
               }
             ]
           }
@@ -112,6 +112,11 @@ const ShoppingCartController = {
         } else if (studentId) {
           results[i].scheduleStatus = "此課程已被預訂"
           continue
+        }
+
+        //3. 檢查課程是否已下架
+        if (!results[i].Schedule.Course.published) {
+          results[i].scheduleStatus = "此課程已下架"
         }
       }
     } catch (err) {

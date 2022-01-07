@@ -1,5 +1,5 @@
 const db = require("../models")
-const { Schedule, Student, Cart } = db
+const { Schedule, Student, Cart, Course } = db
 const { sequelize } = require("../models")
 const { checkTimeOverlap } = require("../utils.js")
 const { Op } = require("sequelize")
@@ -43,7 +43,7 @@ const OrderController = {
           continue
         }
 
-        const { studentId, startTime, finishTime } = checkSchedule
+        const { studentId, startTime, finishTime, courseId } = checkSchedule
 
         //1. 檢查此課程是否過期
         if (new Date(startTime) < new Date()) {
@@ -58,6 +58,17 @@ const OrderController = {
         } else if (studentId) {
           errMessage[scheduleId[i]] = "此課程已被預訂"
           continue
+        }
+
+        //3. 檢查課程是否已下架
+        const checkPublish = await Course.findOne({
+          where: {
+            id: courseId
+          }
+        })
+        const { published } = checkPublish
+        if (!published) {
+          errMessage[scheduleId[i]] = "此課程已下架"
         }
 
         //存到 scheduleData 的物件，便於後續檢查
