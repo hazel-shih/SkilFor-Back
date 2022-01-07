@@ -206,7 +206,7 @@ const TeachersController = {
 
   editCourseInfo: async (req, res) => {
     const { jwtId } = req
-    const { id, courseName, courseDescription, price, audit } = req.body
+    const { id, courseName, courseDescription, price } = req.body
     let { published } = req.body
     let targetCourse
     try {
@@ -225,16 +225,9 @@ const TeachersController = {
         })
         return
       }
-      if (audit !== "pending") {
-        res.status(400)
-        res.json({
-          success: false,
-          value: id,
-          errMessage: ["除了重新送審不得更改課程狀態"]
-        })
-        return
-      }
-      if (targetCourse.audit !== "success") {
+      let { audit } = targetCourse
+      if (audit !== "success") {
+        audit = "pending"
         published = 0
       }
       await Course.update(
