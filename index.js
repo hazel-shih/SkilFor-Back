@@ -16,8 +16,18 @@ const auth = require("./middlewares/auth/auth")
 const app = express()
 const port = 5006
 const cors = require("cors")
+const corsOptions = {
+  origin: [
+    "http://skilfor.tw",
+    "https://skilfor.tw",
+    "http://skilfor.netlify.app",
+    "https://skilfor.netlify.app"
+  ],
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+  allowedHeaders: ["Content-Type", "Authorization"]
+}
 
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.get("/categories", CommonController.getAllCategories)
