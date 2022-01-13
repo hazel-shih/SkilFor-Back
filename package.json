@@ -8,23 +8,24 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
-    "eslint": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.13.0",
     "http-errors": "^1.8.1",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.23",
     "mysql2": "^2.3.3",
-    "nanoid": "^3.1.30"
+    "nanoid": "^3.1.30",
+    "nodemon": "^2.0.15",
+    "sequelize": "^6.9.0",
+    "sequelize-cli": "^6.3.0"
   },
   "devDependencies": {
+    "eslint": "^8.2.0",
     "eslint-config-prettier": "^8.3.0",
     "husky": "^7.0.0",
     "lint-staged": "^12.0.2",
-    "moment": "^2.29.1",
-    "nodemon": "^2.0.15",
-    "prettier": "^2.4.1",
-    "sequelize": "^6.9.0",
-    "sequelize-cli": "^6.3.0"
+    "prettier": "^2.4.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\"",
