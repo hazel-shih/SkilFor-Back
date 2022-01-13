@@ -29,8 +29,8 @@
   },
   "scripts": {
     "pm2": "NODE_ENV=production pm2 start npm --name skilfor -- start",
-    "start": "node app.js",
-    "dev": "nodemon app.js",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\"",
     "lint": "eslint .",
     "prettier": "npx prettier --ignore-path .gitignore \"**/*.+(js)\"",
