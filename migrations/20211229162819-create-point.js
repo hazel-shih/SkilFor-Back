@@ -25,10 +25,8 @@ module.exports = {
       totalPoint: {
         type: Sequelize.INTEGER
       },
-      amount: {
-        type: Sequelize.INTEGER
-      },
       success: {
+        defaultValue: false,
         type: Sequelize.BOOLEAN
       },
       createdAt: {

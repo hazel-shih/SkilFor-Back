@@ -19,7 +19,7 @@
 * 學生初始點數
   * MB_INITIALPOINTS
 
-完成後 `npm install` 安裝所需套件。
+完成後 `npm install` 安裝所需套件，最後 `npx sequelize-cli db:migrate` 建立所有資料表。
 
 ### 開發
 

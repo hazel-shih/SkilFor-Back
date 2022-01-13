@@ -7,9 +7,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.STRING
       },
-      title: {
-        type: Sequelize.STRING
-      },
       teacherId: {
         type: Sequelize.STRING,
         onDelete: "CASCADE",
@@ -28,13 +25,8 @@ module.exports = {
           as: "courseId"
         }
       },
-      startTime: {
-        type: Sequelize.STRING
-      },
-      finishTime: {
-        type: Sequelize.STRING
-      },
       studentId: {
+        defaultValue: null,
         type: Sequelize.STRING,
         references: {
           model: "Students",
@@ -42,10 +34,30 @@ module.exports = {
           as: "studentId"
         }
       },
-      studentNote: {
+      startTime: {
         type: Sequelize.STRING
       },
+      finishTime: {
+        type: Sequelize.STRING
+      },
+      studentNote: {
+        defaultValue: null,
+        type: Sequelize.STRING
+      },
+      title: {
+        type: Sequelize.STRING
+      },
+      month: {
+        type: Sequelize.INTEGER
+      },
       eventColor: {
+        type: Sequelize.STRING
+      },
+      reservedPrice: {
+        defaultValue: null,
+        type: Sequelize.STRING
+      },
+      meetingLink: {
         type: Sequelize.STRING
       },
       exist: {

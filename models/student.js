@@ -17,9 +17,6 @@ module.exports = (sequelize, DataTypes) => {
       Student.hasMany(models.Cart, {
         foreignKey: "studentId"
       })
-      Student.hasMany(models.Order, {
-        foreignKey: "studentId"
-      })
       Student.hasMany(models.Point, {
         foreignKey: "studentId"
       })
@@ -28,9 +25,9 @@ module.exports = (sequelize, DataTypes) => {
   Student.init(
     {
       username: DataTypes.STRING,
-      password: DataTypes.STRING,
       email: DataTypes.STRING,
       contactEmail: DataTypes.STRING,
+      password: DataTypes.STRING,
       avatar: DataTypes.STRING,
       points: DataTypes.INTEGER
     },

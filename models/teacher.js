@@ -22,9 +22,9 @@ module.exports = (sequelize, DataTypes) => {
   Teacher.init(
     {
       username: DataTypes.STRING,
-      password: DataTypes.STRING,
       email: DataTypes.STRING,
       contactEmail: DataTypes.STRING,
+      password: DataTypes.STRING,
       avatar: DataTypes.STRING
     },
     {

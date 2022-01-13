@@ -12,6 +12,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       email: {
+        umique: true,
         type: Sequelize.STRING
       },
       contactEmail: {

@@ -18,13 +18,13 @@ module.exports = {
         type: Sequelize.STRING
       },
       password: {
-        unique: true,
         type: Sequelize.STRING
       },
       avatar: {
         type: Sequelize.STRING
       },
       points: {
+        defaultValue: 0,
         type: Sequelize.INTEGER
       },
       createdAt: {

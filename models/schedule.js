@@ -23,9 +23,6 @@ module.exports = (sequelize, DataTypes) => {
       Schedule.hasMany(models.Cart, {
         foreignKey: "ScheduleId"
       })
-      Schedule.hasOne(models.Order, {
-        foreignKey: "ScheduleId"
-      })
     }
   }
   Schedule.init(
@@ -34,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       courseId: DataTypes.STRING,
       startTime: DataTypes.STRING,
       finishTime: DataTypes.STRING,
+      teacherId: DataTypes.STRING,
       studentId: DataTypes.STRING,
       studentNote: DataTypes.STRING,
       eventColor: DataTypes.STRING,
