@@ -1,7 +1,7 @@
 {
-  "name": "final",
+  "name": "skilfor",
   "version": "1.0.0",
-  "description": "連線測試",
+  "description": "",
   "main": "test.js",
   "dependencies": {
     "bcrypt": "^5.0.1",
