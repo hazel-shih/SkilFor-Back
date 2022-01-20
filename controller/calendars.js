@@ -313,7 +313,7 @@ const CalendarsController = {
     }
   },
 
-  //學生刪除已過期的課程
+  //學生刪除已過期的課程或是被老師取消的課程
   removeCalendar: async (req, res) => {
     const { jwtId } = req
     const { scheduleId } = req.body
@@ -331,7 +331,10 @@ const CalendarsController = {
         })
       }
 
-      if (new Date() <= new Date(checkSchedule.finishTime)) {
+      if (
+        new Date() <= new Date(checkSchedule.finishTime) &&
+        checkSchedule.exist
+      ) {
         res.status(400)
         res.json({
           success: false,
@@ -344,7 +347,7 @@ const CalendarsController = {
 
       return res.status(200).json({
         success: true,
-        data: ["成功移除過期課程"]
+        data: ["成功移除課程"]
       })
     } catch (err) {
       return res.status(400).json({
