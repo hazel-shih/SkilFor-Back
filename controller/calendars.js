@@ -31,16 +31,14 @@ const CalendarsController = {
       }
       // 新增行事曆
       const month = Number(moment(start).tz("Asia/Taipei").format("MM"))
-      if (
-        await Schedule.findOne({
-          where: {
-            courseId,
-            startTime: start
-          }
-        })
-      ) {
-        res.status(400)
-        res.json({
+      const selectedCourse = await Schedule.findOne({
+        where: {
+          courseId,
+          startTime: start
+        }
+      })
+      if (selectedCourse) {
+        return res.status(400).json({
           success: false,
           errMessage: ["不得在同時段新增一樣的課程"]
         })
