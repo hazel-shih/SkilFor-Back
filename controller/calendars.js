@@ -34,7 +34,8 @@ const CalendarsController = {
       const selectedCourse = await Schedule.findOne({
         where: {
           courseId,
-          startTime: start
+          startTime: start,
+          exist: 1
         }
       })
       if (selectedCourse) {
