@@ -2,6 +2,8 @@
 
 這是 Skilfor 後端原始碼，採用 Express + Sequelize 開發。
 
+[網站連結](https://skilfor.netlify.app/#/)
+
 ## 建置
 
 ### 前置作業
